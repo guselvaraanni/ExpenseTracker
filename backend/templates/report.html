@@ -109,7 +109,8 @@
       <select id="range" class="bg-[#111827] border border-gray-700 px-3 py-2 rounded-md text-sm">
         <option value="30">Last 30 days</option>
         <option value="90">Last 90 days</option>
-        <option value="365">This year</option>
+        <option value="365" selected>This year</option>
+
       </select>
     </div>
 
@@ -255,7 +256,7 @@ if (catLabels.length === 0) {
       labels: data.months,
       datasets: [
         { label: "Income", data: data.income, borderColor: "#22C55E", tension: 0.3 },
-        { label: "Expense", data: data.category_expense.expenses, borderColor: "#EF4444", tension: 0.3 }
+        { label: "Expense", data: data.expenses, borderColor: "#EF4444", tension: 0.3 }
       ]
     },
     options: {
