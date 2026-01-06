@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Expense Tracker Dashboard - Dark Theme</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+  
+
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#2563EB",   // Bright blue for buttons, highlights
+            background: "#101922", // Main background
+            card: "#1F2937",       // Section cards
+            sidebar: "#111827",    // Sidebar
+            text: "#FFFFFF",       // Main text
+            muted: "#9CA3AF",      // Secondary text
+            border: "#374151",     // Divider
+            success: "#16A34A",    // Green
+            danger: "#DC2626",     // Red
+            info: "#3B82F6"        // Accent blue
+          },
+          fontFamily: {
+            sans: ["Inter", "sans-serif"],
+          },
+          borderRadius: {
+            DEFAULT: "0.5rem",
+          },
+          boxShadow: {
+            soft: "0 2px 4px rgba(0,0,0,0.2)",
+          }
+        },
+      },
+    };
+  </script>
+
+
+  <style>
+    body {
+      font-size: 0.9rem; /* smaller base */
+      background-color: #121212;
+      color: #E5E7EB;
+    }
+    .chart-placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      color: #6B7280;
+      font-size: 0.85rem;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+    }
+  </style>
+</head>
+<body class="bg-background font-sans text-text">
+  <div class="flex h-screen">
+    <!-- Sidebar -->
+    <aside class="w-60 bg-card border-r border-border hidden lg:flex flex-col fixed h-full">
+      <div class="flex items-center gap-2 px-5 h-16 border-b border-border">
+        <span class="material-symbols-outlined text-primary">account_balance</span>
+        <h1 class="text-base font-semibold">ExpenseApp</h1>
+      </div>
+      <nav class="flex-1 p-3 space-y-1 text-sm">
+        <a class="flex items-center gap-2 rounded-md bg-primary/20 text-primary px-3 py-2" href="{{ url_for('dashboard') }}">
+          <span class="material-symbols-outlined">dashboard</span> Dashboard
+        </a>
+        <a class="flex items-center gap-2 rounded-md px-3 py-2 text-muted hover:bg-gray-800" href="{{ url_for('expense') }}">
+          <span class="material-symbols-outlined">add_box</span> Add Expense
+        </a>
+        <a class="flex items-center gap-2 rounded-md px-3 py-2 text-muted hover:bg-gray-800" href="{{ url_for('report') }}">
+          <span class="material-symbols-outlined">analytics</span> Reports
+        </a>
+        <a class="flex items-center gap-2 rounded-md px-3 py-2 text-muted hover:bg-gray-800" href="{{ url_for('settings') }}">
+          <span class="material-symbols-outlined">settings</span> Settings
+        </a>
+      </nav>
+      <div class="p-3">
+        <a class="flex items-center gap-2 rounded-md px-3 py-2 text-muted hover:bg-gray-800" href="#">
+          <span class="material-symbols-outlined">logout</span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <div class="flex-1 flex flex-col overflow-y-auto lg:ml-60">
+      <!-- Header -->
+      <header class="sticky top-0 z-10 p-5 flex h-16 items-center justify-between border-b border-border bg-background/100 px-4 sm:px-6">
+        <h2 class="text-lg font-semibold">Dashboard</h2>
+        <div class="flex items-center gap-3">
+          <button class="p-2 rounded-full hover:bg-gray-800" id="theme-toggle">
+            <span class="material-symbols-outlined">light_mode</span>
+          </button>
+          <button onclick="window.location.href='{{ url_for('expense') }}'"  class="flex items-center gap-1 bg-primary text-white text-sm font-medium py-1.5 px-3 rounded-full shadow-soft hover:bg-primary/90">
+            <span class="material-symbols-outlined text-sm">add</span> Add Expense
+          </button>
+        </div>
+      </header>
+
+      <!-- Content -->
+      <main class="flex-1 p-4 sm:p-6 space-y-6">
+        <!-- Summary Cards -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+  <div class="bg-card p-4 rounded-lg shadow-soft border border-border">
+    <p class="text-xs text-muted">Total Balance</p>
+    <p class="text-lg font-bold" id="total-balance">$0</p>
+  </div>
+  <div class="bg-card p-4 rounded-lg shadow-soft border border-border">
+    <p class="text-xs text-muted">Income (This Month)</p>
+    <p class="text-lg font-bold text-success" id="income">+$0</p>
+  </div>
+  <div class="bg-card p-4 rounded-lg shadow-soft border border-border">
+    <p class="text-xs text-muted">Expenses (This Month)</p>
+    <p class="text-lg font-bold text-danger" id="expense">-$0</p>
+  </div>
+  <div class="bg-card p-4 rounded-lg shadow-soft border border-border">
+    <p class="text-xs text-muted">Savings</p>
+    <p class="text-lg font-bold text-primary" id="savings">$0</p>
+  </div>
+</div>
+
+
+        <!-- Charts -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div class="bg-card p-4 rounded-lg shadow-soft border border-border">
+            <h3 class="text-sm font-medium mb-2">Expense Distribution</h3>
+            <canvas id="categoryChart" class="h-56"></canvas>
+          </div>
+
+          <div class="lg:col-span-2 bg-card p-4 rounded-lg shadow-soft border border-border">
+            <h3 class="text-sm font-medium mb-2">Monthly Expense Trend</h3>
+            <div class="h-56 chart-placeholder">
+              <canvas id="monthlyChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Transactions -->
+        <div class="bg-card p-4 rounded-lg shadow-soft border border-border">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-3">
+            <h3 class="text-sm font-medium">Recent Transactions</h3>
+            <div class="flex gap-2">
+              <input type="date" class="bg-background border border-border rounded px-2 py-1 text-xs" />
+              <input type="date" class="bg-background border border-border rounded px-2 py-1 text-xs" />
+              <button class="bg-gray-700 text-xs px-3 py-1 rounded hover:bg-gray-600">Download</button>
+            </div>
+          </div>
+          <div class="overflow-x-auto">
+  <table class="w-full text-xs">
+    <thead>
+      <tr class="border-b border-border text-muted">
+        <th class="p-2 text-left">Date</th>
+        <th class="p-2 text-left">Description</th>
+        <th class="p-2 text-left">Category</th>
+        <th class="p-2 text-right">Amount</th>
+        <th class="p-2 text-center">Type</th>
+      </tr>
+    </thead>
+    <tbody id="recent-transactions" class="divide-y divide-border"></tbody>
+  </table>
+</div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+let categoryChart;
+
+function fetchDashboard() {
+  fetch("/dashboard_data")
+    .then(res => res.json())
+    .then(data => {
+      // Update cards
+      document.getElementById("total-balance").innerText = `$${data.total_balance.toFixed(2)}`;
+      document.getElementById("income").innerText = `+$${data.income.toFixed(2)}`;
+      document.getElementById("expense").innerText = `-$${data.expense_total.toFixed(2)}`;
+      document.getElementById("savings").innerText = `$${(data.total_balance - data.expense_total).toFixed(2)}`;
+
+      // Update category chart
+      const ctx = document.getElementById('categoryChart').getContext('2d');
+      const labels = Object.keys(data.category_expense);
+      const values = Object.values(data.category_expense);
+      if (categoryChart) categoryChart.destroy();
+      categoryChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Expenses',
+            data: values,
+            backgroundColor: 'rgba(59, 130, 246, 0.7)',
+            borderColor: 'rgba(59, 130, 246, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false },
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+
+      // Update recent transactions
+      const tbody = document.getElementById("recent-transactions");
+      tbody.innerHTML = "";
+      data.recent_transactions.forEach(e => {
+        const row = `<tr>
+          <td class="p-2">${e.date}</td>
+          <td class="p-2">${e.desc}</td>
+          <td class="p-2">${e.category}</td>
+          <td class="p-2 text-right ${e.type === 'Income' ? 'text-success' : 'text-danger'}">${e.type === "Income" ? "+" : "-"}${e.amount}
+</td>
+          <td class="p-2 text-center"><span class="px-2 py-0.5 rounded ${e.type==='Income' ? 'bg-success/20 text-success':'bg-danger/20 text-danger'}">${e.type}</span></td>
+        </tr>`;
+        tbody.innerHTML += row;
+      });
+    });
+}
+
+// Fetch dashboard initially
+fetchDashboard();
+</script>
+
+
+
+ <!-- Monthly Chart -->
+<script>
+let monthlyChart;
+
+fetch("/dashboard_chart_data")
+  .then(res => res.json())
+  .then(data => {
+    const ctx = document.getElementById('monthlyChart').getContext('2d');
+
+    if (monthlyChart) monthlyChart.destroy();
+
+    monthlyChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: data.months,
+        datasets: [
+          {
+            label: "Income",
+            data: data.income,
+            backgroundColor: "rgba(22, 163, 74, 0.7)"
+          },
+          {
+            label: "Expenses",
+            data: data.expenses,
+            backgroundColor: "rgba(220, 38, 38, 0.7)"
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
