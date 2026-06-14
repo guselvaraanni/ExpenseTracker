@@ -1,0 +1,6 @@
+<header class="app-header">
+  <h1 class="app-header-title">{% block header_title %}{{ page_title | default("Expense Tracker") }}{% endblock %}</h1>
+  <div class="app-header-actions">
+    {% block header_actions %}{% endblock %}
+  </div>
+</header>

@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard — Expense Tracker{% endblock %}
+
+{% block header_title %}Dashboard{% endblock %}
+
+{% block header_actions %}
+<span class="text-muted" style="font-size: 0.85rem;">{{ user_email }}</span>
+{% endblock %}
+
+{% block content %}
+<section class="scaffold-banner">
+  <h2>Authentication is active</h2>
+  <p>You are logged in as <strong>{{ user_email }}</strong>.</p>
+  <p class="text-muted">
+    Dashboard data and charts will be migrated in a later phase. This page confirms protected routes work.
+  </p>
+</section>
+
+<section class="stat-grid">
+  <div class="stat-card">
+    <p class="stat-card-label">Total Balance</p>
+    <p class="stat-card-value">—</p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card-label">Income</p>
+    <p class="stat-card-value">—</p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card-label">Expenses</p>
+    <p class="stat-card-value">—</p>
+  </div>
+  <div class="stat-card">
+    <p class="stat-card-label">Savings</p>
+    <p class="stat-card-value">—</p>
+  </div>
+</section>
+{% endblock %}
