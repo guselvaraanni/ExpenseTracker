@@ -125,10 +125,10 @@ categories = ["Food", "Transport", "Bills"]
 
 # Settings
 transactions = [
-        {"date": "2025-09-01", "desc": "Salary", "category": "Income", "amount": 4500, "type": "Income"},
-    {"date": "2025-09-05", "desc": "Rent", "category": "Housing", "amount": 1500, "type": "Expense"},
-    {"date": "2025-09-10", "desc": "Groceries", "category": "Food", "amount": 200, "type": "Expense"},
-    {"date": "2025-09-12", "desc": "Electricity Bill", "category": "Bills", "amount": 100, "type": "Expense"}
+    #     {"date": "2025-09-01", "desc": "Salary", "category": "Income", "amount": 4500, "type": "Income"},
+    # {"date": "2025-09-05", "desc": "Rent", "category": "Housing", "amount": 1500, "type": "Expense"},
+    # {"date": "2025-09-10", "desc": "Groceries", "category": "Food", "amount": 200, "type": "Expense"},
+    # {"date": "2025-09-12", "desc": "Electricity Bill", "category": "Bills", "amount": 100, "type": "Expense"}
 ]
 user_profile = {}
 
