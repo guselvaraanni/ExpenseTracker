@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>ExpenseTracker - Login</title>
+  <link href="https://fonts.googleapis.com" rel="preconnect"/>
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#1173d4",
+            "background-light": "#f6f7f8",
+            "background-dark": "#101922",
+          },
+          fontFamily: { display: ["Inter"] },
+          borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px" },
+        },
+      },
+    };
+  </script>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display text-gray-800 dark:text-gray-200">
+  <div class="flex flex-col min-h-screen">
+    <header class="w-full bg-white dark:bg-gray-900/50 backdrop-blur-sm border-b border-gray-200 dark:border-gray-800 sticky top-0 z-50">
+      <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+          <h1 class="text-xl font-bold text-gray-900 dark:text-white">ExpenseTracker</h1>
+        </div>
+      </nav>
+    </header>
+    <main class="flex-grow flex items-center justify-center">
+      <div class="w-full max-w-md p-8 space-y-8 bg-white/50 dark:bg-black/20 rounded-lg shadow-md backdrop-blur-sm">
+        <div class="text-center">
+          <h2 class="text-3xl font-bold text-gray-900 dark:text-white">Welcome Back!</h2>
+          <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Login to continue to your account.</p>
+        </div>
+        <div class="flex border border-gray-200 dark:border-gray-700 rounded-lg p-1 bg-gray-100 dark:bg-gray-800">
+          <a href="{{ url_for('login') }}" class="w-1/2 py-2 px-4 text-sm font-medium text-white bg-primary rounded text-center block">Login</a>
+          <a href="{{ url_for('signup') }}" class="w-1/2 py-2 px-4 text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded text-center block">Sign Up</a>
+        </div>
+
+        {% if error %}
+        <div class="text-red-500 text-sm text-center">{{ error }}</div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('login') }}" class="space-y-6">
+          <div>
+            <label class="sr-only" for="email">Email address</label>
+            <input autocomplete="email" class="w-full px-4 py-3 bg-white/20 dark:bg-black/20 border border-gray-300 dark:border-gray-700 rounded-lg placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" id="email" name="username" placeholder="Email address" required type="email"/>
+          </div>
+          <div>
+            <label class="sr-only" for="password">Password</label>
+            <input autocomplete="current-password" class="w-full px-4 py-3 bg-white/20 dark:bg-black/20 border border-gray-300 dark:border-gray-700 rounded-lg placeholder-gray-500 dark:placeholder-gray-400 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" id="password" name="password" placeholder="Password" required type="password"/>
+          </div>
+          <div>
+            <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-primary hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+              Login
+            </button>
+          </div>
+          <p class="text-sm text-center text-gray-500 dark:text-gray-400">
+            Don't have an account?
+            <a class="font-medium text-primary hover:text-primary/80" href="{{ url_for('signup') }}">Sign up</a>
+          </p>
+        </form>
+      </div>
+    </main>
+    <footer class="w-full py-6">
+      <p class="text-center text-sm text-gray-500 dark:text-gray-400">&copy; 2024 ExpenseTracker. All rights reserved.</p>
+    </footer>
+  </div>
+</body>
+</html>
