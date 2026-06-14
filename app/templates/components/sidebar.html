@@ -1,0 +1,15 @@
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <span class="sidebar-logo">ET</span>
+    <span class="sidebar-title">Expense Tracker</span>
+  </div>
+  <nav class="sidebar-nav">
+    <a class="sidebar-link{% if active_page == 'dashboard' %} is-active{% endif %}" href="{{ url_for('dashboard') }}">Dashboard</a>
+    <a class="sidebar-link{% if active_page == 'expense' %} is-active{% endif %}" href="{{ url_for('expense') }}">Add Expense</a>
+    <a class="sidebar-link{% if active_page == 'reports' %} is-active{% endif %}" href="{{ url_for('reports') }}">Reports</a>
+    <a class="sidebar-link{% if active_page == 'settings' %} is-active{% endif %}" href="{{ url_for('settings') }}">Settings</a>
+  </nav>
+  <div class="sidebar-footer">
+    <a class="sidebar-link" href="{{ url_for('logout_get') }}">Logout</a>
+  </div>
+</aside>
